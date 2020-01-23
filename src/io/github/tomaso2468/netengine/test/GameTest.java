@@ -1,7 +1,6 @@
 package io.github.tomaso2468.netengine.test;
 
 import io.github.tomaso2468.netengine.Game;
-import io.github.tomaso2468.netengine.render.opengl.GL11Renderer;
 
 public class GameTest extends Game {
 
@@ -11,7 +10,7 @@ public class GameTest extends Game {
 	
 	@Override
 	public void preInitGame() {
-		setRendererClass(GL11Renderer.class);
+		setRendererID("opengl");
 	}
 
 	@Override

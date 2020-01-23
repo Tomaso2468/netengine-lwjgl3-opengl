@@ -30,7 +30,7 @@ public class GL11Renderer implements Renderer {
 
 	@Override
 	public void preInitWindow() {
-		Log.info("Initialising GLFW");
+		Log.debug("Initialising GLFW");
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		glfwSetErrorCallback(GLFWErrorCallback.create(new GLFWErrorCallback() {
@@ -121,6 +121,7 @@ public class GL11Renderer implements Renderer {
 	
 	@Override
 	public void init() {
+		Log.debug("Initialising OpenGL");
 		GL.createCapabilities();
 	}
 
