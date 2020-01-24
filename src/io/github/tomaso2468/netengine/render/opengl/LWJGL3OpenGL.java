@@ -25,10 +25,32 @@ public class LWJGL3OpenGL implements Plugin {
 	@Override
 	public void preInit(Game game) {
 		game.registerRenderer("opengl-1.1", GL11Renderer.class);
+		game.registerRenderer("opengl-1.2", GL12Renderer.class);
+		game.registerRenderer("opengl-1.3", GL13Renderer.class);
+		game.registerRenderer("opengl-1.4", GL14Renderer.class);
+		game.registerRenderer("opengl-1.5", GL15Renderer.class);
+		game.registerRenderer("opengl-2.0", GL20Renderer.class);
+		game.registerRenderer("opengl-2.1", GL21Renderer.class);
+		game.registerRenderer("opengl-3.0", GL30Renderer.class);
+		game.registerRenderer("opengl-3.1", GL31Renderer.class);
+		game.registerRenderer("opengl-3.2", GL32Renderer.class);
 		
-		game.registerRendererBackwardsCompatible("opengl", GL11Renderer.class);
-		game.registerRendererBackwardsCompatible("opengl-1", GL11Renderer.class);
-		game.registerRendererBackwardsCompatible("opengl-1.1", GL11Renderer.class);
+		Class<?> backwards = GL32Renderer.class;
+		game.registerRendererBackwardsCompatible("opengl", backwards);
+		game.registerRendererBackwardsCompatible("opengl-1", backwards);
+		game.registerRendererBackwardsCompatible("opengl-1.1", backwards);
+		game.registerRendererBackwardsCompatible("opengl-1.2", backwards);
+		game.registerRendererBackwardsCompatible("opengl-1.3", backwards);
+		game.registerRendererBackwardsCompatible("opengl-1.4", backwards);
+		game.registerRendererBackwardsCompatible("opengl-1.5", backwards);
+		game.registerRendererBackwardsCompatible("opengl-2", backwards);
+		game.registerRendererBackwardsCompatible("opengl-2.0", backwards);
+		game.registerRendererBackwardsCompatible("opengl-2.1", backwards);
+		game.registerRendererBackwardsCompatible("opengl-3", backwards);
+		game.registerRendererBackwardsCompatible("opengl-3.0", backwards);
+		game.registerRendererBackwardsCompatible("opengl-3.1", backwards);
+		game.registerRendererBackwardsCompatible("opengl-3.2", backwards);
+		game.registerRendererBackwardsCompatible("opengl", backwards);
 	}
 
 	@Override
