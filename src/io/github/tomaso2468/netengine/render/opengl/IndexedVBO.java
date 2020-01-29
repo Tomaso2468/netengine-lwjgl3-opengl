@@ -1,20 +1,26 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import io.github.tomaso2468.netengine.render.ArrayVertexObject;
+import io.github.tomaso2468.netengine.render.ArrayIndexedVertexObject;
 import io.github.tomaso2468.netengine.render.Renderer;
 
-public class VBO extends ArrayVertexObject {
+public class IndexedVBO extends ArrayIndexedVertexObject {
+	int ebo;
 	int vbo;
 	
-	VBO(float[] vertices, GL15Renderer renderer) {
-		super(vertices);
+	IndexedVBO(float[] vertices, int[] indices, GL15Renderer renderer) {
+		super(vertices, indices);
 		
 		vbo = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+		
+		ebo = glGenBuffers();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 	}
 	
 	public int getVBO() {
@@ -29,7 +35,7 @@ public class VBO extends ArrayVertexObject {
 	
 	@Override
 	public void draw(Renderer renderer) {
-		glDrawArrays(GL_TRIANGLES, 0, getVertices().length);
+		glDrawElements(GL_TRIANGLES, getVertices().length, GL_UNSIGNED_INT, 0);
 	}
 	
 	@Override

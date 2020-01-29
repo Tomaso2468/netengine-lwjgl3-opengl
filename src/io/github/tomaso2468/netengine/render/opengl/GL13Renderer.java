@@ -1,5 +1,9 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+
 public class GL13Renderer extends GL12Renderer {
 
 	public GL13Renderer() {
@@ -7,8 +11,14 @@ public class GL13Renderer extends GL12Renderer {
 	}
 	
 	@Override
-	public String getOpenGLVersion() {
-		return "1.3";
+	protected void setupGLWindowHints() {
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	}
+	
+	@Override
+	public int getOpenGLVersionMax() {
+		return 13;
 	}
 
 }

@@ -1,5 +1,9 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+
 public class GL43Renderer extends GL42Renderer {
 
 	public GL43Renderer() {
@@ -7,13 +11,19 @@ public class GL43Renderer extends GL42Renderer {
 	}
 	
 	@Override
-	public String getShaderFileVersion() {
-		return "430";
+	public int getGLSLVersionMax() {
+		return 430;
 	}
 	
 	@Override
-	public String getOpenGLVersion() {
-		return "4.3";
+	protected void setupGLWindowHints() {
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	}
+	
+	@Override
+	public int getOpenGLVersionMax() {
+		return 43;
 	}
 
 }

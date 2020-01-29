@@ -1,7 +1,32 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
+import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
+import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSize;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -16,9 +41,9 @@ import org.lwjgl.system.APIUtil;
 import org.lwjgl.system.MemoryStack;
 
 import io.github.tomaso2468.netengine.log.Log;
-import io.github.tomaso2468.netengine.render.Renderer;
+import io.github.tomaso2468.netengine.render.OpenGLRenderer;
 
-public abstract class GLFWRenderer implements Renderer {
+public abstract class GLFWRenderer implements OpenGLRenderer {
 	private long window;
 	private boolean vsync = true;
 	private int width;
@@ -122,8 +147,12 @@ public abstract class GLFWRenderer implements Renderer {
 		glfwMakeContextCurrent(window);
 
 		glfwSwapInterval(vsync ? 1 : 0);
+		
+		configureWindowSize(width, height);
 	}
 	
+	protected abstract void configureWindowSize(int width, int height);
+
 	private void centerWindow() {
 		try (MemoryStack stack = stackPush()) {
 			IntBuffer pWidth = stack.mallocInt(1); // int*
@@ -257,6 +286,7 @@ public abstract class GLFWRenderer implements Renderer {
 	public void setDisplay(int width, int height, boolean fullscreen) {
 		if (fullscreen == this.fullscreen) {
 			glfwSetWindowSize(window, width, height);
+			configureWindowSize(width, height);
 		} else {
 			long oldWindow = window;
 			
@@ -268,5 +298,4 @@ public abstract class GLFWRenderer implements Renderer {
 		this.fullscreen = fullscreen;
 		fetchWindowSize();
 	}
-
 }
