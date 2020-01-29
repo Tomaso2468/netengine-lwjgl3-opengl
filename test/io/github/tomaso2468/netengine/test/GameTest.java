@@ -7,6 +7,7 @@ import io.github.tomaso2468.netengine.Game;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Renderer;
 import io.github.tomaso2468.netengine.render.Shader;
+import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.render.TexturedVertexObject;
 
 public class GameTest extends Game {
@@ -44,6 +45,7 @@ public class GameTest extends Game {
 	private RenderState state;
 	private TexturedVertexObject object;
 	private Shader shader;
+	private Texture texture;
 
 	@Override
 	protected void renderInit(Renderer renderer) {
