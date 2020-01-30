@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import io.github.tomaso2468.netengine.EngineException;
 import io.github.tomaso2468.netengine.Game;
+import io.github.tomaso2468.netengine.log.Log;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Renderer;
 import io.github.tomaso2468.netengine.render.Shader;
@@ -27,10 +28,10 @@ public class GameTest extends Game {
 	}
 
 	float vertices[] = {
-	     0.5f,  0.5f, 0.0f, 	0.5f,  0.5f,  // top right
-	     0.5f, -0.5f, 0.0f, 	0.5f, -0.5f,  // bottom right
-	    -0.5f, -0.5f, 0.0f, 	-0.5f, -0.5f,  // bottom left
-	    -0.5f,  0.5f, 0.0f,		-0.5f,  0.5f,   // top left 
+	     0.5f,  0.5f, 0.0f, 	1f,  1f,  // top right
+	     0.5f, -0.5f, 0.0f, 	1f,  0f,  // bottom right
+	    -0.5f, -0.5f, 0.0f, 	0f,  0f,  // bottom left
+	    -0.5f,  0.5f, 0.0f,		0f,  1f,   // top left 
 	};
 	int indices[] = {  // note that we start from 0!
 	    0, 1, 3,   // first triangle
@@ -50,11 +51,20 @@ public class GameTest extends Game {
 	@Override
 	protected void renderInit(Renderer renderer) {
 		try {
+			Log.debug("Compiling shader");
 			shader = renderer.createShader(GameTest.class.getResource("/vertex.vs"), GameTest.class.getResource("/fragment.fs"));
+			
+			shader.startUse();
+			shader.setUniform1i("texture1", 0);
+			shader.endUse();
+			
+			Log.debug("Texture");
+			texture = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture.png"), "png");
 		} catch (IOException e) {
 			throw new EngineException(e);
 		}
 		
+		Log.debug("State");
 		state = renderer.createRenderState();
 		state.enterState();
 		
@@ -68,11 +78,11 @@ public class GameTest extends Game {
 	
 	@Override
 	protected void render(Renderer renderer) {
-		state.enterState();
+		texture.bind(0);
 		
 		shader.startUse();
+		state.enterState();
 		object.draw(renderer);
-		
 		state.leaveState();
 	}
 }

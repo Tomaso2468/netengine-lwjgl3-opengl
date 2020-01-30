@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.stb.STBImage.*;
 
 import io.github.tomaso2468.netengine.render.Texture;
@@ -14,6 +15,7 @@ public class GLTexture implements Texture {
 	int height;
 	
 	public GLTexture(ByteBuffer image, int width, int height, int channels) {
+		glActiveTexture(GL_TEXTURE0);
 		texture = glGenTextures();
 		
 		glBindTexture(GL_TEXTURE_2D, texture);
@@ -25,7 +27,11 @@ public class GLTexture implements Texture {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
+		glGenerateMipmap(GL_TEXTURE_2D);
+		
 		stbi_image_free(image);
+		
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	@Override
@@ -40,12 +46,13 @@ public class GLTexture implements Texture {
 
 	@Override
 	public void bind(int unit) {
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, texture);
 	}
 
 	@Override
 	public void unbind(int unit) {
+		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 

@@ -1,17 +1,25 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.stb.STBImage.*;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_VERSION;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glGetString;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glVertex3f;
+import static org.lwjgl.opengl.GL11.glViewport;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.GL;
-import org.lwjgl.system.MemoryStack;
 
 import io.github.tomaso2468.netengine.Color;
 import io.github.tomaso2468.netengine.log.Log;
@@ -22,7 +30,6 @@ import io.github.tomaso2468.netengine.render.IndexedVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.Texture;
-import io.github.tomaso2468.netengine.render.TextureLoadException;
 import io.github.tomaso2468.netengine.render.TexturedVertexObject;
 import io.github.tomaso2468.netengine.render.VertexObject;
 
@@ -169,52 +176,8 @@ public class GL11Renderer extends GLFWRenderer {
 		glEnd();
 	}
 	
-	protected ByteBuffer readToBuffer(InputStream in) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
-		while (in.available() > 0) {
-			out.write(in.read());
-		}
-		
-		in.close();
-		out.close();
-		
-		byte[] arr = out.toByteArray();
-		
-		ByteBuffer buffer = ByteBuffer.allocateDirect(arr.length);
-		
-		buffer.put(arr);
-		buffer.flip();
-		
-		return buffer;
-	}
-	
 	@Override
 	public Texture loadTexture(InputStream in, String format) throws IOException {
-		ByteBuffer image;
-        int width, height;
-        int channels;
-        
-        ByteBuffer imageBuffer = readToBuffer(in);
-
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            /* Prepare image buffers */
-            IntBuffer w = stack.mallocInt(1);
-            IntBuffer h = stack.mallocInt(1);
-            IntBuffer comp = stack.mallocInt(1);
-
-            /* Load image */
-            image = stbi_load_from_memory(imageBuffer, w, h, comp, 0);
-            if (image == null) {
-                throw new TextureLoadException("Failed to load a texture file: " + stbi_failure_reason());
-            }
-
-            /* Get width and height of image */
-            width = w.get();
-            height = h.get();
-            channels = comp.get();
-        }
-        
-        return new GLTexture(imageBuffer, width, height, channels);
+		throw new UnsupportedOperationException("Textures require at least GL30 to correctly use");
 	}
 }

@@ -40,9 +40,11 @@ public class GLShader implements Shader {
 		}
 		
 		int location = glGetUniformLocation(program, name);
-		if (location == 0) {
+		if (location == -1) {
 			throw new ShaderVariableException(name);
 		}
+		
+		System.out.println(location);
 		
 		locations.put(name, location);
 		
