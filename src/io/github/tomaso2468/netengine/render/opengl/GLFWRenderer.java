@@ -15,6 +15,8 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.APIUtil;
 import org.lwjgl.system.MemoryStack;
 
+import io.github.tomaso2468.netengine.input.Input;
+import io.github.tomaso2468.netengine.input.Key;
 import io.github.tomaso2468.netengine.log.Log;
 import io.github.tomaso2468.netengine.render.OpenGLRenderer;
 
@@ -26,6 +28,12 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 	private boolean resizable;
 	private boolean fullscreen;
 	private String title;
+	private double mouseX;
+	private double mouseY;
+	private double lastMouseX;
+	private double lastMouseY;
+	private double scrollX;
+	private double scrollY;
 
 	public GLFWRenderer() {
 		// An empty constructor must exist.
@@ -96,23 +104,33 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 		if (window == NULL) {
 			throw new GLFWException("Failed to create the GLFW window");
 		}
-
-		// Setup a key callback. It will be called every time a key is pressed, repeated
-		// or released.
-		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-				glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-		});
 		
 		glfwSetFramebufferSizeCallback(window, (window, w, h) -> {
 			configureWindowSize(w, h);
 			this.width = w;
 			this.height = h;
+			lastMouseX = width / 2;
+			lastMouseY = height / 2;
 		});
 		
 		glfwSetWindowMaximizeCallback(window, (window, maximised) -> {
 			fetchWindowSize();
 			configureWindowSize(width, height);
+			lastMouseX = width / 2;
+			lastMouseY = height / 2;
+		});
+		
+		glfwSetCursorPosCallback(window, (window, x, y) -> {
+			mouseX += x - lastMouseX;
+			mouseY += lastMouseY - y;
+			
+			lastMouseX = x;
+			lastMouseY = y;
+		});
+		
+		glfwSetScrollCallback(window, (window, x, y) -> {
+			scrollX += x;
+			scrollY += y;
 		});
 
 		centerWindow();
@@ -135,6 +153,9 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 		glfwSwapInterval(vsync ? 1 : 0);
 		
 		configureWindowSize(width, height);
+		
+		lastMouseX = width / 2;
+		lastMouseY = height / 2;
 	}
 	
 	protected abstract void configureWindowSize(int width, int height);
@@ -283,5 +304,66 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 		}
 		this.fullscreen = fullscreen;
 		fetchWindowSize();
+		
+		lastMouseX = width / 2;
+		lastMouseY = height / 2;
+	}
+	
+	@Override
+	public Input getInput() {
+		return new Input() {
+			@Override
+			public boolean isKeyDown(Key key) {
+				return glfwGetKey(window, getKey(key)) == GLFW_PRESS;
+			}
+			
+			@Override
+			public void clearMouseDelta() {
+				mouseX = 0;
+				mouseY = 0;
+				scrollX = 0;
+				scrollY = 0;
+			}
+			
+			@Override
+			public float getMouseX() {
+				return (float) (lastMouseX / getSize() * 2 - 1);
+			}
+			
+			@Override
+			public float getMouseY() {
+				return (float) (lastMouseY / getSize() * 2 - 1);
+			}
+			
+			@Override
+			public float getMouseDX() {
+				return (float) (mouseX / getSize() * 2);
+			}
+			
+			@Override
+			public float getMouseDY() {
+				return (float) (mouseY / getSize() * 2);
+			}
+
+			@Override
+			public float getMouseWheelDX() {
+				return (float) scrollX;
+			}
+
+			@Override
+			public float getMouseWheelDY() {
+				Log.debug(scrollY + "");
+				return (float) scrollY;
+			}
+		};
+	}
+	
+	private int getKey(Key key) {
+		return key.getGLFWBinding();
+	}
+	
+	@Override
+	public void setCaptureMouse(boolean capture) {
+		glfwSetInputMode(window, GLFW_CURSOR, capture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 	}
 }

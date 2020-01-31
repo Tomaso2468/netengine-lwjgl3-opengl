@@ -44,8 +44,6 @@ public class GLShader implements Shader {
 			throw new ShaderVariableException(name);
 		}
 		
-		System.out.println(location);
-		
 		locations.put(name, location);
 		
 		return location;
