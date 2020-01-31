@@ -352,7 +352,6 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 
 			@Override
 			public float getMouseWheelDY() {
-				Log.debug(scrollY + "");
 				return (float) scrollY;
 			}
 		};
