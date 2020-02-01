@@ -9,11 +9,11 @@ import io.github.tomaso2468.netengine.EngineException;
 import io.github.tomaso2468.netengine.Game;
 import io.github.tomaso2468.netengine.camera.SimpleCamera3D;
 import io.github.tomaso2468.netengine.log.Log;
+import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Renderer;
 import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.Texture;
-import io.github.tomaso2468.netengine.render.TexturedVertexObject;
 
 public class GameTest extends Game {
 
@@ -32,14 +32,17 @@ public class GameTest extends Game {
 	}
 
 	float vertices[] = {
-	     0.5f,  0.5f, 0.0f, 	1f,  1f,  // top right
-	     0.5f, -0.5f, 0.0f, 	1f,  0f,  // bottom right
-	    -0.5f, -0.5f, 0.0f, 	0f,  0f,  // bottom left
-	    -0.5f,  0.5f, 0.0f,		0f,  1f,   // top left 
+	     0.5f,  0.5f, 0.0f, 	1f,  1f, 0,  // top right
+	     0.5f, -0.5f, 0.0f, 	1f,  0f, 0,  // bottom right
+	    -0.5f, -0.5f, 0.0f, 	0f,  0f, 0,  // bottom left
+	    -0.5f,  0.5f, 0.0f,		0f,  1f, 0,   // top left 
+	    0, 0, 0, 0.5f, 0.5f, 1, // Center
 	};
 	int indices[] = {  // note that we start from 0!
-	    0, 1, 3,   // first triangle
-	    1, 2, 3    // second triangle
+	    0, 4, 1,
+	    0, 4, 3,
+	    1, 4, 2,
+	    3, 4, 2,
 	};  
 	
 	@Override
@@ -48,9 +51,10 @@ public class GameTest extends Game {
 	}
 	
 	private RenderState state;
-	private TexturedVertexObject object;
+	private MultiTextureVertexObject object;
 	private Shader shader;
 	private Texture texture;
+	private Texture texture2;
 
 	@Override
 	protected void renderInit(Renderer renderer) {
@@ -60,10 +64,12 @@ public class GameTest extends Game {
 			
 			shader.startUse();
 			shader.setUniform1i("texture1", 0);
+			shader.setUniform1i("texture2", 1);
 			shader.endUse();
 			
 			Log.debug("Texture");
 			texture = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture.png"), "png");
+			texture2 = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture2.png"), "png");
 		} catch (IOException e) {
 			throw new EngineException(e);
 		}
@@ -72,9 +78,10 @@ public class GameTest extends Game {
 		state = renderer.createRenderState();
 		state.enterState();
 		
-		object = renderer.createStaticVOTextured(vertices, indices);
+		object = renderer.createStaticVOMultiTexture(vertices, indices);
 		object.configureVO(0);
 		object.configureVOTexture(1);
+		object.configureVOSelect(2);
 		
 		object.unbind();
 		state.leaveState();
@@ -134,6 +141,7 @@ public class GameTest extends Game {
 		camera.update(renderer.getInput(), 1f / 60);
 		
 		texture.bind(0);
+		texture2.bind(1);
 		
 		shader.startUse();
 		state.enterState();

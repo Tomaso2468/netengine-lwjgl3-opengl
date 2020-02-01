@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.opengl.GL20.*;
 
 import io.github.tomaso2468.netengine.render.IndexedVertexObject;
+import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.ShaderCompileException;
 import io.github.tomaso2468.netengine.render.ShaderLinkException;
@@ -125,5 +126,10 @@ public class GL20Renderer extends GL15Renderer {
 	@Override
 	public TexturedVertexObject createStaticVOTextured(float[] data, int[] indices) {
 		return new TexturedVBO(data, indices, this);
+	}
+	
+	@Override
+	public MultiTextureVertexObject createStaticVOMultiTexture(float[] data, int[] indices) {
+		return new MultiTextureVBO(data, indices, this);
 	}
 }

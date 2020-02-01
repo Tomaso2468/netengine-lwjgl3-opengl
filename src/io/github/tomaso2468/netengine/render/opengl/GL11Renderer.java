@@ -11,9 +11,11 @@ import org.lwjgl.opengl.GL;
 import io.github.tomaso2468.netengine.Color;
 import io.github.tomaso2468.netengine.log.Log;
 import io.github.tomaso2468.netengine.render.ArrayIndexedVertexObject;
+import io.github.tomaso2468.netengine.render.ArrayMultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayTexturedVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayVertexObject;
 import io.github.tomaso2468.netengine.render.IndexedVertexObject;
+import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.Texture;
@@ -73,6 +75,11 @@ public class GL11Renderer extends GLFWRenderer {
 	@Override
 	public TexturedVertexObject createStaticVOTextured(float[] data, int[] indices) {
 		return new ArrayTexturedVertexObject(data, indices);
+	}
+	
+	@Override
+	public MultiTextureVertexObject createStaticVOMultiTexture(float[] data, int[] indices) {
+		return new ArrayMultiTextureVertexObject(data, indices);
 	}
 	
 	public String getOpenGLVersion() {
