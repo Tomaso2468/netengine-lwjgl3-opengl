@@ -50,6 +50,8 @@ public class GLShader implements Shader {
 	private Map<String, Vector3i> values3i = new HashMap<>();
 	private Map<String, Vector4i> values4i = new HashMap<>();
 	
+	private Map<String, Boolean> values1b = new HashMap<>();
+	
 	public int getLocation(String name) {
 		if (locations.containsKey(name)) {
 			return locations.get(name);
@@ -232,6 +234,30 @@ public class GLShader implements Shader {
 	@Override
 	public void endUse() {
 		glUseProgram(0);
+	}
+
+	@Override
+	public void setUniform1b(String name, boolean x) {
+		if (values1b.containsKey(name) && values1b.get(name).equals(x)) {
+			return;
+		}
+		values1b.put(name, x);
+		glUniform1i(getLocation(name), x ? 1 : 0);
+	}
+
+	@Override
+	public void setUniform2b(String name, boolean x, boolean y) {
+		glUniform2i(getLocation(name), x ? 1 : 0, y ? 1 : 0);
+	}
+
+	@Override
+	public void setUniform3b(String name, boolean x, boolean y, boolean z) {
+		glUniform3i(getLocation(name), x ? 1 : 0, y ? 1 : 0, z ? 1 : 0);
+	}
+
+	@Override
+	public void setUniform4b(String name, boolean x, boolean y, boolean z, boolean w) {
+		glUniform4i(getLocation(name), x ? 1 : 0, y ? 1 : 0, z ? 1 : 0, w ? 1 : 0);
 	}
 
 }

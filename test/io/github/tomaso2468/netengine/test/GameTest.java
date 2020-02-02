@@ -15,6 +15,7 @@ import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.scene3d.BasicObject3D;
 import io.github.tomaso2468.netengine.scene3d.Material;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongDirectionalLight;
+import io.github.tomaso2468.netengine.scene3d.phong.PhongLighting;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongMaterial;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongScene;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongSpotLight;
@@ -128,7 +129,8 @@ public class GameTest extends Game {
 		Texture texture, diffuse, specular, ambient, shiny, texture2;
 		try {
 			Log.debug("Compiling shader");
-			shader = renderer.createShader(GameTest.class.getResource("/vertex.vs"), GameTest.class.getResource("/fragment.fs"));
+			//shader = renderer.createShader(GameTest.class.getResource("/vertex.vs"), GameTest.class.getResource("/fragment.fs"));
+			shader = PhongLighting.createDefaultBlinnPhongShader(renderer);
 			
 			Log.debug("Texture");
 			texture = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture.png"), "png");
@@ -150,7 +152,7 @@ public class GameTest extends Game {
 		Material m2 = new PhongMaterial(shader, texture2, ambient, diffuse, specular, shiny);
 		
 		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true);
-		object.setCull(false);
+		object.setCull(true);
 		
 		BasicObject3D object2 = new BasicObject3D(renderer, vertices2, indices2, m2, false);
 		
