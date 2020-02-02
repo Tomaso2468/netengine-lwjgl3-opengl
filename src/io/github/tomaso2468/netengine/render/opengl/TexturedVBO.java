@@ -38,13 +38,19 @@ public class TexturedVBO extends ArrayTexturedVertexObject {
 	
 	@Override
 	public void configureVO(int location) {
-		glVertexAttribPointer(location, 3, GL_FLOAT, false, 5 * 4, 0);
+		glVertexAttribPointer(location, 3, GL_FLOAT, false, 8 * 4, 0);
 		glEnableVertexAttribArray(location);
 	}
 	
 	@Override
 	public void configureVOTexture(int location) {
-		glVertexAttribPointer(location, 2, GL_FLOAT, false, 5 * 4, 3 * 4);
+		glVertexAttribPointer(location, 2, GL_FLOAT, false, 8 * 4, 3 * 4);
+		glEnableVertexAttribArray(location);
+	}
+	
+	@Override
+	public void configureVONormal(int location) {
+		glVertexAttribPointer(location, 3, GL_FLOAT, false, 8 * 4, 5 * 4);
 		glEnableVertexAttribArray(location);
 	}
 	

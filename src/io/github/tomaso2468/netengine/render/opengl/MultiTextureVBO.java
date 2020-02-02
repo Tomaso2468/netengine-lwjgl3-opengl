@@ -38,19 +38,25 @@ public class MultiTextureVBO extends ArrayMultiTextureVertexObject {
 	
 	@Override
 	public void configureVO(int location) {
-		glVertexAttribPointer(location, 3, GL_FLOAT, false, 6 * 4, 0);
+		glVertexAttribPointer(location, 3, GL_FLOAT, false, 9 * 4, 0);
 		glEnableVertexAttribArray(location);
 	}
 	
 	@Override
 	public void configureVOTexture(int location) {
-		glVertexAttribPointer(location, 2, GL_FLOAT, false, 6 * 4, 3 * 4);
+		glVertexAttribPointer(location, 2, GL_FLOAT, false, 9 * 4, 3 * 4);
+		glEnableVertexAttribArray(location);
+	}
+	
+	@Override
+	public void configureVONormal(int location) {
+		glVertexAttribPointer(location, 3, GL_FLOAT, false, 9 * 4, 5 * 4);
 		glEnableVertexAttribArray(location);
 	}
 	
 	@Override
 	public void configureVOSelect(int location) {
-		glVertexAttribPointer(location, 1, GL_FLOAT, false, 6 * 4, 5 * 4);
+		glVertexAttribPointer(location, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 		glEnableVertexAttribArray(location);
 	}
 	
