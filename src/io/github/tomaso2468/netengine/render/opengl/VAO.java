@@ -6,7 +6,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import io.github.tomaso2468.netengine.render.RenderState;
 
 public class VAO implements RenderState {
-	int vao;
+	final int vao;
 	
 	public VAO() {
 		vao = glGenVertexArrays();

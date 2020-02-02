@@ -17,8 +17,8 @@ import io.github.tomaso2468.netengine.render.ArrayTexturedVertexObject;
 import io.github.tomaso2468.netengine.render.Renderer;
 
 public class TexturedVBO extends ArrayTexturedVertexObject {
-	int ebo;
-	int vbo;
+	final int ebo;
+	final int vbo;
 	
 	TexturedVBO(float[] data, int[] indices, GL15Renderer renderer) {
 		super(data, indices);

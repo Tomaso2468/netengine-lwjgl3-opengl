@@ -7,7 +7,7 @@ import io.github.tomaso2468.netengine.render.ArrayVertexObject;
 import io.github.tomaso2468.netengine.render.Renderer;
 
 public class VBO extends ArrayVertexObject {
-	int vbo;
+	final int vbo;
 	
 	VBO(float[] vertices, GL15Renderer renderer) {
 		super(vertices);

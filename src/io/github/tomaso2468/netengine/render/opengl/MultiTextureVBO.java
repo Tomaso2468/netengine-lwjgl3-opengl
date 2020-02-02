@@ -17,8 +17,8 @@ import io.github.tomaso2468.netengine.render.ArrayMultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.Renderer;
 
 public class MultiTextureVBO extends ArrayMultiTextureVertexObject {
-	int ebo;
-	int vbo;
+	final int ebo;
+	final int vbo;
 	
 	MultiTextureVBO(float[] data, int[] indices, GL15Renderer renderer) {
 		super(data, indices);

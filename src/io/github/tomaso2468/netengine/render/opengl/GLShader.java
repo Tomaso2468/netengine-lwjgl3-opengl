@@ -30,8 +30,8 @@ import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.ShaderVariableException;
 
 public class GLShader implements Shader {
-	int program;
-	GL20Renderer renderer;
+	final int program;
+	final GL20Renderer renderer;
 	
 	public GLShader(int program, GL20Renderer renderer) {
 		this.program = program;

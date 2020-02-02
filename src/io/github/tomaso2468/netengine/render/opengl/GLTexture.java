@@ -10,13 +10,15 @@ import static org.lwjgl.stb.STBImage.*;
 import io.github.tomaso2468.netengine.render.Texture;
 
 public class GLTexture implements Texture {
-	int texture;
-	int width;
-	int height;
+	final int texture;
+	final int width;
+	final int height;
 	
 	public GLTexture(ByteBuffer image, int width, int height, int channels) {
 		glActiveTexture(GL_TEXTURE0);
 		texture = glGenTextures();
+		this.width = width;
+		this.height = height;
 		
 		glBindTexture(GL_TEXTURE_2D, texture);
 		

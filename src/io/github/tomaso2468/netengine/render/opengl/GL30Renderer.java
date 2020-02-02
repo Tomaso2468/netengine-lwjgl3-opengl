@@ -11,6 +11,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.system.MemoryStack;
 
+import io.github.tomaso2468.netengine.render.Framebuffer;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.render.TextureLoadException;
@@ -96,6 +97,11 @@ public class GL30Renderer extends GL21Renderer {
         }
         
         return new GLTexture(image, width, height, channels);
+	}
+	
+	@Override
+	public Framebuffer createFramebuffer(int width, int height) {
+		return new FBO(width, height);
 	}
 
 }

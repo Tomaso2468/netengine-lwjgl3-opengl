@@ -8,8 +8,8 @@ import io.github.tomaso2468.netengine.render.ArrayIndexedVertexObject;
 import io.github.tomaso2468.netengine.render.Renderer;
 
 public class IndexedVBO extends ArrayIndexedVertexObject {
-	int ebo;
-	int vbo;
+	final int ebo;
+	final int vbo;
 	
 	IndexedVBO(float[] vertices, int[] indices, GL15Renderer renderer) {
 		super(vertices, indices);

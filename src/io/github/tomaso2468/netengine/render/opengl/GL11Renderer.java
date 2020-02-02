@@ -15,6 +15,7 @@ import io.github.tomaso2468.netengine.render.ArrayMultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayTexturedVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayVertexObject;
 import io.github.tomaso2468.netengine.render.BlendFactor;
+import io.github.tomaso2468.netengine.render.Framebuffer;
 import io.github.tomaso2468.netengine.render.IndexedVertexObject;
 import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
@@ -244,5 +245,11 @@ public class GL11Renderer extends GLFWRenderer {
 		} else {
 			glDisable(GL_CULL_FACE);
 		}
+	}
+
+	@Override
+	public Framebuffer createFramebuffer(int width, int height) {
+		throwUnsupported("Framebuffer");
+		return null;
 	}
 }
