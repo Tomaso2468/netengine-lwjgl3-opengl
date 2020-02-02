@@ -41,7 +41,7 @@ public class GameTest extends Game {
 			30, -1, 30,   1, 1,  0, 1, 0, 1,
 	};
 	int indices2[] = {  // note that we start from 0!
-		    0, 1, 3,
+		    3, 1, 0,
 		    0, 2, 3,
 		};  
 	
@@ -89,8 +89,8 @@ public class GameTest extends Game {
 		    -0.5f,  0.5f, -0.5f, 0, 0,  0.0f,  1.0f,  0.0f, 0,
 		};
 	int indices[] = {  // note that we start from 0!
-	    0, 1, 2,
-	    3, 4, 5,
+	    2, 1, 0,
+	    5, 4, 3,
 	    
 	    6, 7, 8,
 	    9, 10, 11,
@@ -98,14 +98,14 @@ public class GameTest extends Game {
 	    12, 13, 14,
 	    15, 16, 17,
 	    
-	    18, 19, 20,
-	    21, 22, 23,
+	    20, 19, 18,
+	    23, 22, 21,
 	    
 	    24, 25, 26,
 	    27, 28, 29,
 	    
-	    30, 31, 32, 
-	    33, 34, 35,
+	    32, 31, 30, 
+	    35, 34, 33,
 	};  
 	
 	@Override
@@ -143,6 +143,7 @@ public class GameTest extends Game {
 		Material m2 = new PhongMaterial(shader, texture2, ambient, diffuse, specular, shiny);
 		
 		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true);
+		object.setCull(false);
 		
 		BasicObject3D object2 = new BasicObject3D(renderer, vertices2, indices2, m2, false);
 		

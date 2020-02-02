@@ -183,7 +183,6 @@ public class GL11Renderer extends GLFWRenderer {
 		} else {
 			glDisable(GL_DEPTH_TEST);
 		}
-		
 	}
 	
 	public int convert(BlendFactor f) {
@@ -236,5 +235,14 @@ public class GL11Renderer extends GLFWRenderer {
 		}
 		
 		glBlendFunc(convert(src), convert(dest));
+	}
+
+	@Override
+	public void setFaceCull(boolean enabled) {
+		if (enabled) {
+			glEnable(GL_CULL_FACE);
+		} else {
+			glDisable(GL_CULL_FACE);
+		}
 	}
 }
