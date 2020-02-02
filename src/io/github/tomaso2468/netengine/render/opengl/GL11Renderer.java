@@ -14,6 +14,7 @@ import io.github.tomaso2468.netengine.render.ArrayIndexedVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayMultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayTexturedVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayVertexObject;
+import io.github.tomaso2468.netengine.render.BlendFactor;
 import io.github.tomaso2468.netengine.render.IndexedVertexObject;
 import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
@@ -183,5 +184,57 @@ public class GL11Renderer extends GLFWRenderer {
 			glDisable(GL_DEPTH_TEST);
 		}
 		
+	}
+	
+	public int convert(BlendFactor f) {
+		int srcf;
+		switch(f) {
+		case DEST_ALPHA:
+			srcf = GL_DST_ALPHA;
+			break;
+		case DEST_COLOR:
+			srcf = GL_DST_COLOR;
+			break;
+		case ONE:
+			srcf = GL_ONE;
+			break;
+		case ONE_MINUS_DEST_ALPHA:
+			srcf = GL_ONE_MINUS_DST_ALPHA;
+			break;
+		case ONE_MINUS_DEST_COLOR:
+			srcf = GL_ONE_MINUS_DST_COLOR;
+			break;
+		case ONE_MINUS_SRC_ALPHA:
+			srcf = GL_ONE_MINUS_SRC_ALPHA;
+			break;
+		case ONE_MINUS_SRC_COLOR:
+			srcf = GL_ONE_MINUS_SRC_COLOR;
+			break;
+		case SRC_ALPHA:
+			srcf = GL_SRC_ALPHA;
+			break;
+		case SRC_COLOR:
+			srcf = GL_SRC_COLOR;
+			break;
+		case ZERO:
+			srcf = GL_ZERO;
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported blend factor for color: " + f);
+		}
+		
+		return srcf;
+	}
+
+	@Override
+	public void setBlend(BlendFactor src, BlendFactor dest) {
+		if (src == BlendFactor.DISABLE || dest == BlendFactor.DISABLE) {
+			glDisable(GL_BLEND);
+			return;
+		} else {
+			glEnable(GL_BLEND);
+		}
+		
+		glBlendFunc(convert(src), convert(dest));
 	}
 }

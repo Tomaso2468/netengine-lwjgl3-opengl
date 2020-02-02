@@ -118,13 +118,14 @@ public class GameTest extends Game {
 
 	@Override
 	protected void renderInit(Renderer renderer) {
-		Texture texture, diffuse, specular, ambient, shiny;
+		Texture texture, diffuse, specular, ambient, shiny, texture2;
 		try {
 			Log.debug("Compiling shader");
 			shader = renderer.createShader(GameTest.class.getResource("/vertex.vs"), GameTest.class.getResource("/fragment.fs"));
 			
 			Log.debug("Texture");
 			texture = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture.png"), "png");
+			texture2 = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture2.png"), "png");
 			diffuse = renderer.loadTexture(GameTest.class.getResourceAsStream("/diffuse.png"), "png");
 			ambient = renderer.loadTexture(GameTest.class.getResourceAsStream("/ambient.png"), "png");
 			specular = renderer.loadTexture(GameTest.class.getResourceAsStream("/specular.png"), "png");
@@ -139,15 +140,18 @@ public class GameTest extends Game {
 		scene.add(new PhongDirectionalLight(new Vector3f(-0.5f, -0.5f, 0), Color.white));
 		
 		Material m = new PhongMaterial(shader, texture, ambient, diffuse, specular, shiny);
+		Material m2 = new PhongMaterial(shader, texture2, ambient, diffuse, specular, shiny);
 		
-		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m);
+		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true);
 		
-		BasicObject3D object2 = new BasicObject3D(renderer, vertices2, indices2, m);
+		BasicObject3D object2 = new BasicObject3D(renderer, vertices2, indices2, m2, false);
 		
 		scene.add(object);
 		scene.add(object2);
 		
 		scene.getCamera().setPosition(new Vector3f(-3, 0, 0));
+		
+		scene.init(this, renderer);
 		
 		renderer.setDepthTest(true);
 		renderer.setCaptureMouse(true);
