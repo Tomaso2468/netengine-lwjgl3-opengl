@@ -8,6 +8,7 @@ import io.github.tomaso2468.netengine.Color;
 import io.github.tomaso2468.netengine.EngineException;
 import io.github.tomaso2468.netengine.Game;
 import io.github.tomaso2468.netengine.log.Log;
+import io.github.tomaso2468.netengine.render.AntialiasingType;
 import io.github.tomaso2468.netengine.render.Renderer;
 import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.Texture;
@@ -111,6 +112,12 @@ public class GameTest extends Game {
 	@Override
 	protected void initGame() {
 		super.initGame();
+	}
+	
+	@Override
+	protected void configure(Renderer renderer) {
+		super.configure(renderer);
+		renderer.setAntialiasing(AntialiasingType.MSAA, 4);
 	}
 	
 	private PhongScene scene;

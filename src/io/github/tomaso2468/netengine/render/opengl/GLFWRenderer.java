@@ -18,6 +18,7 @@ import org.lwjgl.system.MemoryStack;
 import io.github.tomaso2468.netengine.input.Input;
 import io.github.tomaso2468.netengine.input.Key;
 import io.github.tomaso2468.netengine.log.Log;
+import io.github.tomaso2468.netengine.render.AntialiasingType;
 import io.github.tomaso2468.netengine.render.OpenGLRenderer;
 
 public abstract class GLFWRenderer implements OpenGLRenderer {
@@ -34,6 +35,8 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 	private double lastMouseY;
 	private double scrollX;
 	private double scrollY;
+	protected boolean msaa = false;
+	protected int msaaSamples = 0;
 
 	public GLFWRenderer() {
 		// An empty constructor must exist.
@@ -93,6 +96,11 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 		glfwDefaultWindowHints(); // optional, the current window hints are already the default
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
 		glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE); // the window will be resizable.
+		
+		if (msaa) {
+			glfwWindowHint(GLFW_SAMPLES, msaaSamples);
+		}
+		
 		setupGLWindowHints();
 		
 		this.resizable = resizable;
@@ -364,5 +372,15 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 	@Override
 	public void setCaptureMouse(boolean capture) {
 		glfwSetInputMode(window, GLFW_CURSOR, capture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+	}
+	
+	@Override
+	public void setAntialiasing(AntialiasingType type, int samples) {
+		if (type == AntialiasingType.MSAA) {
+			this.msaa = true;
+			this.msaaSamples = samples;
+			return;
+		}
+		throw new IllegalArgumentException(type + "");
 	}
 }

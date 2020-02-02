@@ -25,10 +25,6 @@ import io.github.tomaso2468.netengine.render.TexturedVertexObject;
 import io.github.tomaso2468.netengine.render.VertexObject;
 
 public class GL11Renderer extends GLFWRenderer {
-	public GL11Renderer() {
-		// An empty constructor must exist.
-	}
-	
 	private boolean capInit = false;
 	
 	@Override

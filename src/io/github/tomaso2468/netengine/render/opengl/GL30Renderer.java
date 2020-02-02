@@ -101,7 +101,7 @@ public class GL30Renderer extends GL21Renderer {
 	
 	@Override
 	public Framebuffer createFramebuffer(int width, int height) {
-		return new FBO(width, height);
+		return new FBO(width, height, this);
 	}
 
 }
