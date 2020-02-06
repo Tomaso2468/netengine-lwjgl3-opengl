@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.joml.Vector3f;
 
+import io.github.tomaso2468.netengine.Color;
 import io.github.tomaso2468.netengine.EngineException;
 import io.github.tomaso2468.netengine.Game;
 import io.github.tomaso2468.netengine.input.Input;
@@ -15,10 +16,9 @@ import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.scene3d.BasicObject3D;
 import io.github.tomaso2468.netengine.scene3d.Material;
 import io.github.tomaso2468.netengine.scene3d.ShaderLoader;
-import io.github.tomaso2468.netengine.scene3d.ShaderMaterial;
-import io.github.tomaso2468.netengine.scene3d.deferred.DeferredMaterial;
-import io.github.tomaso2468.netengine.scene3d.deferred.DeferredScene;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongMaterial;
+import io.github.tomaso2468.netengine.scene3d.phong.PhongScene;
+import io.github.tomaso2468.netengine.scene3d.phong.PhongSpotLight;
 
 public class GameTest extends Game {
 
@@ -121,7 +121,7 @@ public class GameTest extends Game {
 		renderer.setAntialiasing(AntialiasingType.DISABLED, 0);
 	}
 	
-	private DeferredScene scene;
+	private PhongScene scene;
 	private Shader shader;
 
 	@Override
@@ -138,12 +138,12 @@ public class GameTest extends Game {
 			throw new EngineException(e);
 		}
 		
-		scene = new DeferredScene();
+		scene = new PhongScene();
 		
-//		scene.add(new PhongSpotLight(new Vector3f(0, 50, 0), new Vector3f(0, -1, 0), Color.white, 0.05f, 0.1f));
+		scene.add(new PhongSpotLight(new Vector3f(0, 20, 0), new Vector3f(0, -1, 0), Color.white.multiply(1.1f), 0.25f, 0.1f));
 //		//scene.add(new PhongDirectionalLight(new Vector3f(-0.5f, -0.5f, 0), Color.white));
 		
-		Material m = new DeferredMaterial(shader, diffuse, specular);
+		Material m = new PhongMaterial(shader, diffuse, specular);
 		
 		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true) {
 			@Override
