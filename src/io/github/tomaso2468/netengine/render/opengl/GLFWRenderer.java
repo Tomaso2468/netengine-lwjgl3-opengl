@@ -381,6 +381,11 @@ public abstract class GLFWRenderer implements OpenGLRenderer {
 			this.msaaSamples = samples;
 			return;
 		}
+		if (type == AntialiasingType.DISABLED) {
+			this.msaa = false;
+			this.msaaSamples = 0;
+			return;
+		}
 		throw new IllegalArgumentException(type + "");
 	}
 }

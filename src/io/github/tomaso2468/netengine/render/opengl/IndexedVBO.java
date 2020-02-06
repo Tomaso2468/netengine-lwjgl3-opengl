@@ -47,4 +47,11 @@ public class IndexedVBO extends ArrayIndexedVertexObject {
 	public void unbind() {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		glDeleteBuffers(vbo);
+		glDeleteBuffers(ebo);
+	}
 }

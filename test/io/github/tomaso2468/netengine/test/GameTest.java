@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import org.joml.Vector3f;
 
-import io.github.tomaso2468.netengine.Color;
 import io.github.tomaso2468.netengine.EngineException;
 import io.github.tomaso2468.netengine.Game;
+import io.github.tomaso2468.netengine.input.Input;
 import io.github.tomaso2468.netengine.log.Log;
 import io.github.tomaso2468.netengine.render.AntialiasingType;
 import io.github.tomaso2468.netengine.render.Renderer;
@@ -14,11 +14,11 @@ import io.github.tomaso2468.netengine.render.Shader;
 import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.scene3d.BasicObject3D;
 import io.github.tomaso2468.netengine.scene3d.Material;
-import io.github.tomaso2468.netengine.scene3d.phong.PhongDirectionalLight;
-import io.github.tomaso2468.netengine.scene3d.phong.PhongLighting;
+import io.github.tomaso2468.netengine.scene3d.ShaderLoader;
+import io.github.tomaso2468.netengine.scene3d.ShaderMaterial;
+import io.github.tomaso2468.netengine.scene3d.deferred.DeferredMaterial;
+import io.github.tomaso2468.netengine.scene3d.deferred.DeferredScene;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongMaterial;
-import io.github.tomaso2468.netengine.scene3d.phong.PhongScene;
-import io.github.tomaso2468.netengine.scene3d.phong.PhongSpotLight;
 
 public class GameTest extends Game {
 
@@ -118,43 +118,43 @@ public class GameTest extends Game {
 	@Override
 	protected void configure(Renderer renderer) {
 		super.configure(renderer);
-		renderer.setAntialiasing(AntialiasingType.MSAA, 4);
+		renderer.setAntialiasing(AntialiasingType.DISABLED, 0);
 	}
 	
-	private PhongScene scene;
+	private DeferredScene scene;
 	private Shader shader;
 
 	@Override
 	protected void renderInit(Renderer renderer) {
-		Texture texture, diffuse, specular, ambient, shiny, texture2;
+		Texture diffuse, specular;
 		try {
 			Log.debug("Compiling shader");
-			//shader = renderer.createShader(GameTest.class.getResource("/vertex.vs"), GameTest.class.getResource("/fragment.fs"));
-			shader = PhongLighting.createDefaultBlinnPhongShader(renderer);
+//			shader = renderer.createShader(GameTest.class.getResource("/vertex.vs"), GameTest.class.getResource("/fragment.fs"));
+			shader = ShaderLoader.createDefaultDeferredShader(renderer);
 			
-			Log.debug("Texture");
-			texture = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture.png"), "png");
-			texture2 = renderer.loadTexture(GameTest.class.getResourceAsStream("/texture2.png"), "png");
-			diffuse = renderer.loadTexture(GameTest.class.getResourceAsStream("/diffuse.png"), "png");
-			ambient = renderer.loadTexture(GameTest.class.getResourceAsStream("/ambient.png"), "png");
+			diffuse = renderer.loadTexture(GameTest.class.getResourceAsStream("/ambient.png"), "png");
 			specular = renderer.loadTexture(GameTest.class.getResourceAsStream("/specular.png"), "png");
-			shiny = renderer.loadTexture(GameTest.class.getResourceAsStream("/shiny.png"), "png");
 		} catch (IOException e) {
 			throw new EngineException(e);
 		}
 		
-		scene = new PhongScene();
+		scene = new DeferredScene();
 		
-		scene.add(new PhongSpotLight(new Vector3f(0, 50, 0), new Vector3f(0, -1, 0), Color.white, 0.05f, 0.1f));
-		scene.add(new PhongDirectionalLight(new Vector3f(-0.5f, -0.5f, 0), Color.white));
+//		scene.add(new PhongSpotLight(new Vector3f(0, 50, 0), new Vector3f(0, -1, 0), Color.white, 0.05f, 0.1f));
+//		//scene.add(new PhongDirectionalLight(new Vector3f(-0.5f, -0.5f, 0), Color.white));
 		
-		Material m = new PhongMaterial(shader, texture, ambient, diffuse, specular, shiny);
-		Material m2 = new PhongMaterial(shader, texture2, ambient, diffuse, specular, shiny);
+		Material m = new DeferredMaterial(shader, diffuse, specular);
 		
-		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true);
-		object.setCull(true);
+		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true) {
+			@Override
+			public void update(Game game, Input input, float delta) {
+				setRotation(getRotation().add(new Vector3f(delta, delta / 2, delta / 3)));
+			}
+		};
+		object.setCull(false);
 		
-		BasicObject3D object2 = new BasicObject3D(renderer, vertices2, indices2, m2, false);
+		BasicObject3D object2 = new BasicObject3D(renderer, vertices2, indices2, m, false);
+		object2.setCull(false);
 		
 		scene.add(object);
 		scene.add(object2);

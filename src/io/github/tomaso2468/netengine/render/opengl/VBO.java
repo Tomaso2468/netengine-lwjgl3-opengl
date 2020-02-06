@@ -1,6 +1,7 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL20.*;
 
 import io.github.tomaso2468.netengine.render.ArrayVertexObject;
@@ -40,5 +41,11 @@ public class VBO extends ArrayVertexObject {
 	@Override
 	public void unbind() {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		glDeleteBuffers(vbo);
 	}
 }

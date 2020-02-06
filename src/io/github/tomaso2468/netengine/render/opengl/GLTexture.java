@@ -58,4 +58,9 @@ public class GLTexture implements Texture {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	@Override
+	public void dispose() {
+		glDeleteTextures(texture);
+	}
+
 }

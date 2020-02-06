@@ -1,15 +1,14 @@
 package io.github.tomaso2468.netengine.render.opengl;
 
-import io.github.tomaso2468.netengine.render.Framebuffer;
-import io.github.tomaso2468.netengine.render.RenderException;
-import io.github.tomaso2468.netengine.render.Texture;
-
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL32.*;
 
-public class FBO implements Framebuffer, Texture {
+import io.github.tomaso2468.netengine.render.Framebuffer;
+import io.github.tomaso2468.netengine.render.RenderException;
+
+public class FBO implements Framebuffer {
 	private final int width;
 	private final int height;
 	final int fbo;
@@ -51,18 +50,38 @@ public class FBO implements Framebuffer, Texture {
 		}
 		
 		// Create and bind depth
-		depth = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, depth);
+		depth = glGenRenderbuffers();
+		glBindRenderbuffer(GL_RENDERBUFFER, depth);
 		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width, height, 0, GL_DEPTH, GL_FLOAT, 0);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, width, height);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth);  
 		
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-			throw new RenderException("Framebuffer is not complete.");
+			throw new RenderException("Framebuffer is not complete: " + getFrameBufferError(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
+		}
+	}
+	
+	private String getFrameBufferError(int error) {
+		switch (error) {
+		case GL_FRAMEBUFFER_UNDEFINED:
+			return "GL_FRAMEBUFFER_UNDEFINED";
+		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+			return "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT";
+		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+			return "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT";
+		case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+			return "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER";
+		case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+			return "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER";
+		case GL_FRAMEBUFFER_UNSUPPORTED:
+			return "GL_FRAMEBUFFER_UNSUPPORTED";
+		case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+			return "GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE";
+		case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+			return "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS";
+		default:
+			return "Unknown (" + Integer.toHexString(error) + ")";
 		}
 	}
 
@@ -115,6 +134,11 @@ public class FBO implements Framebuffer, Texture {
 		} else {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+	}
+	
+	@Override
+	public void dispose() {
+		glDeleteFramebuffers(fbo);
 	}
 
 }

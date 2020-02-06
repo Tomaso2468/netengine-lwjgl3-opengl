@@ -16,6 +16,7 @@ import io.github.tomaso2468.netengine.render.ArrayTexturedVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayVertexObject;
 import io.github.tomaso2468.netengine.render.BlendFactor;
 import io.github.tomaso2468.netengine.render.Framebuffer;
+import io.github.tomaso2468.netengine.render.GBuffer;
 import io.github.tomaso2468.netengine.render.IndexedVertexObject;
 import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
@@ -247,5 +248,27 @@ public class GL11Renderer extends GLFWRenderer {
 	public Framebuffer createFramebuffer(int width, int height) {
 		throwUnsupported("Framebuffer");
 		return null;
+	}
+	
+	@Override
+	public Framebuffer createShadowbuffer(int width, int height) {
+		throwUnsupported("Framebuffer");
+		return null;
+	}
+
+	@Override
+	public GBuffer createGBuffer(int width, int height, int bufferCount) {
+		throwUnsupported("Framebuffer");
+		return null;
+	}
+
+	@Override
+	public void drawQuadUV(float[] data) {
+		glBegin(GL_QUADS);
+		for (int i = 0; i < data.length; i+=5) {
+			glVertex3f(data[i], data[i + 1], data[i + 2]);
+			glTexCoord2f(data[i + 3], data[i + 4]);
+		}
+		glEnd();
 	}
 }

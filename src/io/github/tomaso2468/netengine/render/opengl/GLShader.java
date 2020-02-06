@@ -66,6 +66,21 @@ public class GLShader implements Shader {
 		
 		return location;
 	}
+	
+	public int getLocationO(String name) {
+		if (locations.containsKey(name)) {
+			return locations.get(name);
+		}
+		
+		int location = glGetUniformLocation(program, name);
+		if (location == -1) {
+			return -1;
+		}
+		
+		locations.put(name, location);
+		
+		return location;
+	}
 
 	@Override
 	public void setUniform1f(String name, float x) {
@@ -258,6 +273,194 @@ public class GLShader implements Shader {
 	@Override
 	public void setUniform4b(String name, boolean x, boolean y, boolean z, boolean w) {
 		glUniform4i(getLocation(name), x ? 1 : 0, y ? 1 : 0, z ? 1 : 0, w ? 1 : 0);
+	}
+	
+	@Override
+	public void setUniform1fO(String name, float x) {
+		if (values1f.containsKey(name) && values1f.get(name) == x) {
+			return;
+		}
+		values1f.put(name, x);
+		glUniform1f(getLocationO(name), x);
+	}
+
+	@Override
+	public void setUniform2fO(String name, float x, float y) {
+		if (values2f.containsKey(name) && values2f.get(name).equals(new Vector2f(x, y))) {
+			return;
+		}
+		values2f.put(name, new Vector2f(x, y));
+		glUniform2f(getLocationO(name), x, y);
+	}
+
+	@Override
+	public void setUniform3fO(String name, float x, float y, float z) {
+		if (values3f.containsKey(name) && values3f.get(name).equals(new Vector3f(x, y, z))) {
+			return;
+		}
+		values3f.put(name, new Vector3f(x, y, z));
+		glUniform3f(getLocationO(name), x, y, z);
+	}
+
+	@Override
+	public void setUniform4fO(String name, float x, float y, float z, float w) {
+		if (values4f.containsKey(name) && values4f.get(name).equals(new Vector4f(x, y, z, w))) {
+			return;
+		}
+		values4f.put(name, new Vector4f(x, y, z, w));
+		glUniform4f(getLocationO(name), x, y, z, w);
+	}
+
+	@Override
+	public void setUniform1iO(String name, int x) {
+		if (values1i.containsKey(name) && values1i.get(name) == x) {
+			return;
+		}
+		values1i.put(name, x);
+		glUniform1i(getLocationO(name), x);
+	}
+
+	@Override
+	public void setUniform2iO(String name, int x, int y) {
+		if (values2i.containsKey(name) && values2i.get(name).equals(new Vector2i(x, y))) {
+			return;
+		}
+		values2i.put(name, new Vector2i(x, y));
+		glUniform2i(getLocationO(name), x, y);
+	}
+
+	@Override
+	public void setUniform3iO(String name, int x, int y, int z) {
+		if (values3i.containsKey(name) && values3i.get(name).equals(new Vector3i(x, y, z))) {
+			return;
+		}
+		values3i.put(name, new Vector3i(x, y, z));
+		glUniform3i(getLocationO(name), x, y, z);
+	}
+
+	@Override
+	public void setUniform4iO(String name, int x, int y, int z, int w) {
+		if (values4i.containsKey(name) && values4i.get(name).equals(new Vector4i(x, y, z, w))) {
+			return;
+		}
+		values4i.put(name, new Vector4i(x, y,z , w));
+		glUniform4i(getLocationO(name), x, y, z, w);
+	}
+
+	@Override
+	public void setUniform1uiO(String name, int x) {
+		if (renderer.getOpenGLVersionInt() >= 30) {
+			glUniform1ui(getLocationO(name), x);
+		} else {
+			renderer.throwUnsupported("Unsigned Int Uniforms");
+		}
+	}
+
+	@Override
+	public void setUniform2uiO(String name, int x, int y) {
+		if (renderer.getOpenGLVersionInt() >= 30) {
+			glUniform2ui(getLocationO(name), x, y);
+		} else {
+			renderer.throwUnsupported("Unsigned Int Uniforms");
+		}
+	}
+
+	@Override
+	public void setUniform3uiO(String name, int x, int y, int z) {
+		if (renderer.getOpenGLVersionInt() >= 30) {
+			glUniform3ui(getLocationO(name), x, y, z);
+		} else {
+			renderer.throwUnsupported("Unsigned Int Uniforms");
+		}
+	}
+
+	@Override
+	public void setUniform4uiO(String name, int x, int y, int z, int w) {
+		if (renderer.getOpenGLVersionInt() >= 30) {
+			glUniform4ui(getLocationO(name), x, y, z, w);
+		} else {
+			renderer.throwUnsupported("Unsigned Int Uniforms");
+		}
+	}
+
+	@Override
+	public void setUniformMatrix2O(String name, Matrix2f m) {
+		try (MemoryStack stack = stackPush()) {
+			FloatBuffer buffer = stack.mallocFloat(2 * 2);
+			m.get(buffer);
+			glUniformMatrix2fv(getLocationO(name), false, buffer);
+		}
+	}
+
+	@Override
+	public void setUniformMatrix3O(String name, Matrix3f m) {
+		try (MemoryStack stack = stackPush()) {
+			FloatBuffer buffer = stack.mallocFloat(3 * 3);
+			m.get(buffer);
+			glUniformMatrix3fv(getLocationO(name), false, buffer);
+		}
+	}
+
+	@Override
+	public void setUniformMatrix4O(String name, Matrix4f m) {
+		try (MemoryStack stack = stackPush()) {
+			FloatBuffer buffer = stack.mallocFloat(4 * 4);
+			m.get(buffer);
+			glUniformMatrix4fv(getLocationO(name), false, buffer);
+		}
+	}
+
+	@Override
+	public void setUniformMatrix3x2O(String name, Matrix3x2f m) {
+		if (renderer.getOpenGLVersionInt() < 21) {
+			renderer.throwUnsupported("Non-Square Matrix");
+		}
+		try (MemoryStack stack = stackPush()) {
+			FloatBuffer buffer = stack.mallocFloat(3 * 2);
+			m.get(buffer);
+			glUniformMatrix3x2fv(getLocationO(name), false, buffer);
+		}
+	}
+
+	@Override
+	public void setUniformMatrix4x3O(String name, Matrix4x3f m) {
+		if (renderer.getOpenGLVersionInt() < 21) {
+			renderer.throwUnsupported("Non-Square Matrix");
+		}
+		try (MemoryStack stack = stackPush()) {
+			FloatBuffer buffer = stack.mallocFloat(4 * 3);
+			m.get(buffer);
+			glUniformMatrix4x3fv(getLocationO(name), false, buffer);
+		}
+	}
+	
+	@Override
+	public void setUniform1bO(String name, boolean x) {
+		if (values1b.containsKey(name) && values1b.get(name).equals(x)) {
+			return;
+		}
+		values1b.put(name, x);
+		glUniform1i(getLocationO(name), x ? 1 : 0);
+	}
+
+	@Override
+	public void setUniform2bO(String name, boolean x, boolean y) {
+		glUniform2i(getLocationO(name), x ? 1 : 0, y ? 1 : 0);
+	}
+
+	@Override
+	public void setUniform3bO(String name, boolean x, boolean y, boolean z) {
+		glUniform3i(getLocationO(name), x ? 1 : 0, y ? 1 : 0, z ? 1 : 0);
+	}
+
+	@Override
+	public void setUniform4bO(String name, boolean x, boolean y, boolean z, boolean w) {
+		glUniform4i(getLocationO(name), x ? 1 : 0, y ? 1 : 0, z ? 1 : 0, w ? 1 : 0);
+	}
+
+	@Override
+	public void dispose() {
+		glDeleteProgram(program);
 	}
 
 }
