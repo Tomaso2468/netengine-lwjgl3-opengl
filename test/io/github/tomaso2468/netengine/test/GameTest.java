@@ -9,13 +9,13 @@ import io.github.tomaso2468.netengine.EngineException;
 import io.github.tomaso2468.netengine.Game;
 import io.github.tomaso2468.netengine.input.Input;
 import io.github.tomaso2468.netengine.log.Log;
+import io.github.tomaso2468.netengine.material.Material;
 import io.github.tomaso2468.netengine.render.AntialiasingType;
 import io.github.tomaso2468.netengine.render.Renderer;
 import io.github.tomaso2468.netengine.render.Shader;
+import io.github.tomaso2468.netengine.render.ShaderLoader;
 import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.scene3d.BasicObject3D;
-import io.github.tomaso2468.netengine.scene3d.Material;
-import io.github.tomaso2468.netengine.scene3d.ShaderLoader;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongMaterial;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongScene;
 import io.github.tomaso2468.netengine.scene3d.phong.PhongSpotLight;
@@ -143,9 +143,9 @@ public class GameTest extends Game {
 		scene.add(new PhongSpotLight(new Vector3f(0, 20, 0), new Vector3f(0, -1, 0), Color.white.multiply(1.1f), 0.25f, 0.1f));
 //		//scene.add(new PhongDirectionalLight(new Vector3f(-0.5f, -0.5f, 0), Color.white));
 		
-		Material m = new PhongMaterial(shader, diffuse, specular);
+		Material m = new PhongMaterial(shader, diffuse, specular, PhongMaterial.getDefaultDepthShader(renderer));
 		
-		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, true) {
+		BasicObject3D object = new BasicObject3D(renderer, vertices, indices, m, false) {
 			@Override
 			public void update(Game game, Input input, float delta) {
 				setRotation(getRotation().add(new Vector3f(delta, delta / 2, delta / 3)));

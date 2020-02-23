@@ -5,10 +5,11 @@ import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL32.*;
 
-import io.github.tomaso2468.netengine.render.Framebuffer;
+import io.github.tomaso2468.netengine.render.FrameBuffer;
 import io.github.tomaso2468.netengine.render.RenderException;
+import io.github.tomaso2468.netengine.render.ShadowBuffer;
 
-public class FBO implements Framebuffer {
+public class FBO implements ShadowBuffer, FrameBuffer {
 	private final int width;
 	private final int height;
 	final int fbo;
@@ -41,7 +42,7 @@ public class FBO implements Framebuffer {
 			texture = glGenTextures();
 			glBindTexture(GL_TEXTURE_2D, texture);
 			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, 0);
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

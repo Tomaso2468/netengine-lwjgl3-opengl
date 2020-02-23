@@ -15,12 +15,13 @@ import io.github.tomaso2468.netengine.render.ArrayMultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayTexturedVertexObject;
 import io.github.tomaso2468.netengine.render.ArrayVertexObject;
 import io.github.tomaso2468.netengine.render.BlendFactor;
-import io.github.tomaso2468.netengine.render.Framebuffer;
+import io.github.tomaso2468.netengine.render.FrameBuffer;
 import io.github.tomaso2468.netengine.render.GBuffer;
 import io.github.tomaso2468.netengine.render.IndexedVertexObject;
 import io.github.tomaso2468.netengine.render.MultiTextureVertexObject;
 import io.github.tomaso2468.netengine.render.RenderState;
 import io.github.tomaso2468.netengine.render.Shader;
+import io.github.tomaso2468.netengine.render.ShadowBuffer;
 import io.github.tomaso2468.netengine.render.Texture;
 import io.github.tomaso2468.netengine.render.TexturedVertexObject;
 import io.github.tomaso2468.netengine.render.VertexObject;
@@ -245,20 +246,20 @@ public class GL11Renderer extends GLFWRenderer {
 	}
 
 	@Override
-	public Framebuffer createFramebuffer(int width, int height) {
-		throwUnsupported("Framebuffer");
+	public FrameBuffer createFrameBuffer(int width, int height) {
+		throwUnsupported("FrameBuffer");
 		return null;
 	}
 	
 	@Override
-	public Framebuffer createShadowbuffer(int width, int height) {
-		throwUnsupported("Framebuffer");
+	public ShadowBuffer createShadowBuffer(int width, int height) {
+		throwUnsupported("ShadowBuffer");
 		return null;
 	}
 
 	@Override
 	public GBuffer createGBuffer(int width, int height, int bufferCount) {
-		throwUnsupported("Framebuffer");
+		throwUnsupported("GBuffer");
 		return null;
 	}
 
